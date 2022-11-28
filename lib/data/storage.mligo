@@ -7,10 +7,10 @@
 
 type 'a t = {
   metadata: Metadata.t;
-  ledger : Ledger.t;
-  token_metadata : TokenMetadata.t;
-  operators : Operators.t;
-  extension : 'a;
+  ledger: Ledger.t;
+  token_metadata: TokenMetadata.t;
+  operators: Operators.t;
+  extension: 'a;
 }
 
 let assert_token_exist (type a) (s: a t) (token_id : Token.t) : unit  =

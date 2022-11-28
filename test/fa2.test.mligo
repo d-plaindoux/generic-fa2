@@ -1,4 +1,4 @@
-#import "./fa2.mligo" "FA2"
+#import "../lib/contracts/fa2.mligo" "FA2"
 #import "./helpers/list.mligo" "List_helper"
 
 let get_initial_storage (a, b, c : nat * nat * nat) =
@@ -50,7 +50,7 @@ let get_initial_storage (a, b, c : nat * nat * nat) =
     ledger         = ledger;
     token_metadata = token_metadata;
     operators      = operators;
-    extension      = "foo";
+    extension      = ();
   } in
   initial_storage, owners, ops
 

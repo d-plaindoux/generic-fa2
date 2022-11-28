@@ -1,4 +1,4 @@
-#import "./multi_asset.instance.mligo" "MultiAsset"
+#import "./fa2.mligo" "FA2"
 #import "./helpers/list.mligo" "List_helper"
 
 let get_initial_storage (a, b, c : nat * nat * nat) =
@@ -25,23 +25,24 @@ let get_initial_storage (a, b, c : nat * nat * nat) =
   in
 
   let operators  = Big_map.literal ([
-    ((owner1, op1), Set.literal [1n; 2n]);
-    ((owner2, op1), Set.literal [2n]);
-    ((owner3, op1), Set.literal [3n]);
-    ((op1   , op3), Set.literal [2n]);
+    ((owner1, 1n), Set.literal [op1]);
+    ((owner1, 2n), Set.literal [op1]);
+    ((owner2, 2n), Set.literal [op2]);
+    ((owner3, 3n), Set.literal [op1]);
+    ((op1   , 2n), Set.literal [op3]);
   ])
   in
 
   let token_metadata = (Big_map.literal [
     (1n, ({token_id=1n;token_info=(Map.empty : (string, bytes) map);} :
-    MultiAsset.FA2.TokenMetadata.data));
+    FA2.TokenMetadata.data));
     (2n, ({token_id=2n;token_info=(Map.empty : (string, bytes) map);} :
-    MultiAsset.FA2.TokenMetadata.data));
+    FA2.TokenMetadata.data));
     (3n, ({token_id=3n;token_info=(Map.empty : (string, bytes) map);} :
-    MultiAsset.FA2.TokenMetadata.data));
-  ] : MultiAsset.FA2.TokenMetadata.t) in
+    FA2.TokenMetadata.data));
+  ] : FA2.TokenMetadata.t) in
 
-  let initial_storage = {
+  let initial_storage : FA2.extended_storage = {
     metadata = Big_map.literal [
         ("", Bytes.pack("tezos-storage:contents"));
         ("contents", ("": bytes))
@@ -51,11 +52,10 @@ let get_initial_storage (a, b, c : nat * nat * nat) =
     operators      = operators;
     extension      = "foo";
   } in
-
   initial_storage, owners, ops
 
 let assert_balances
-  (contract_address : (MultiAsset.parameter, MultiAsset.extended_storage) typed_address )
+  (contract_address : (FA2.parameter, FA2.extended_storage) typed_address )
   (a, b, c : (address * nat * nat) * (address * nat * nat) * (address * nat * nat)) =
   let (owner1, token_id_1, balance1) = a in
   let (owner2, token_id_2, balance2) = b in
@@ -83,11 +83,11 @@ let test_atomic_tansfer_success =
   let owner3 = List_helper.nth_exn 2 owners in
   let op1    = List_helper.nth_exn 0 operators in
   let transfer_requests = ([
-    ({from_=owner1; tx=([{to_=owner2;amount=2n;token_id=2n};] : MultiAsset.FA2.atomic_trans list)});
-  ] : MultiAsset.FA2.transfer)
+    ({from_=owner1; tx=[{to_=owner2;amount=2n;token_id=2n}] });
+  ] : FA2.Transfer.t)
   in
   let () = Test.set_source op1 in
-  let (t_addr,_,_) = Test.originate MultiAsset.main initial_storage 0tez in
+  let (t_addr,_,_) = Test.originate FA2.main initial_storage 0tez in
   let contr = Test.to_contract t_addr in
   let _ = Test.transfer_to_contract_exn contr (Transfer transfer_requests) 0tez in
   let () = assert_balances t_addr ((owner1, 2n, 8n), (owner2, 2n, 12n), (owner3, 3n, 10n)) in

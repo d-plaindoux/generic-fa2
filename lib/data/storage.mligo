@@ -1,15 +1,10 @@
-(**
-   This file implement the TZIP-12 protocol (a.k.a FA2) for NFT on Tezos
-   copyright Wulfman Corporation 2021
-*)
-
 #import "errors.mligo" "Errors"
 #import "metadata.mligo" "Metadata"
+#import "token.mligo" "Token"
 #import "operators.mligo" "Operators"
 #import "tokenMetadata.mligo" "TokenMetadata"
 #import "ledger.mligo" "Ledger"
 
-type token_id = nat
 type 'a t = {
   metadata: Metadata.t;
   ledger : Ledger.t;
@@ -18,7 +13,7 @@ type 'a t = {
   extension : 'a;
 }
 
-let assert_token_exist (type a) (s: a t) (token_id : nat) : unit  =
+let assert_token_exist (type a) (s: a t) (token_id : Token.t) : unit  =
   let _ = Option.unopt_with_error (Big_map.find_opt token_id s.token_metadata)
      Errors.undefined_token in
   ()

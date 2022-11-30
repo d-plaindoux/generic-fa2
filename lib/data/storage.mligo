@@ -19,6 +19,7 @@ let assert_token_exist (type a) (s: a t) (token_id : Token.t) : unit  =
   ()
 
 let set_ledger (type a) (s: a t) (ledger:Ledger.t) = {s with ledger = ledger}
+let get_ledger (type a) (s: a t) = s.ledger
 
 let get_operators (type a) (s: a t) = s.operators
 let set_operators (type a) (s: a t) (operators:Operators.t) = {s with operators = operators}

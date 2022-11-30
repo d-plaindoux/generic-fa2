@@ -23,5 +23,5 @@ type export_ticket = singler_export_ticket list
 
 type t = export_ticket
 
-let export_ticket (_exported_ticket : export_ticket) (storage: storage) : operation list * storage =
+let export_ticket (type a) (_exported_ticket : export_ticket) (storage: a storage) : operation list * a storage =
    ([]: operation list), storage

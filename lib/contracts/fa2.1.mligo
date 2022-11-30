@@ -20,6 +20,7 @@ let main ((p,s):(parameter * extended_storage)): operation list * extended_stora
    | Transfer         p -> Transfer.transfer   p s
    | Balance_of       p -> Balance_of.balance_of p s
    | Update_operators p -> Update.update_ops p s
+   | Import_ticket    p -> Import_ticket.import_tickets p s
 
 (*
    Views corner

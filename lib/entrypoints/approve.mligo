@@ -16,5 +16,5 @@ type approvements = single_approve list
 
 type t = approvements
 
-let main (_approvements: approvements) (storage: storage) : operation list * storage =
+let approve (type a) (_approvements: approvements) (storage: a storage) : operation list * a storage =
    ([]: operation list), storage

@@ -19,6 +19,8 @@ type balance_of = [@layout:comb] {
       callback : callback list contract;
    }
 
+type t = balance_of
+
 let balance_of (type a) (b: balance_of) (s: a storage) : operation list * a storage =
    let {requests;callback} = b in
    let get_balance_info (request : request) : callback =

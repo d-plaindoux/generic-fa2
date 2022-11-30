@@ -5,14 +5,16 @@
 #import "../entrypoints/transfer.mligo" "Transfer"
 #import "../entrypoints/balance_of.mligo" "Balance_of"
 #import "../entrypoints/update.mligo" "Update"
+#import "../entrypoints/import_ticket.mligo" "Import_ticket"
 
 type storage = Storage.t
 type extended_storage = unit storage
 
 type parameter = [@layout:comb]
-   | Transfer of Transfer.t
-   | Balance_of of Balance_of.t
-   | Update_operators of Update.t
+   | Transfer of Transfer.transfer
+   | Balance_of of Balance_of.balance_of
+   | Update_operators of Update.update_operators
+   | Import_ticket of Import_ticket.import_ticket
 
 let main ((p,s):(parameter * extended_storage)): operation list * extended_storage = match p with
    | Transfer         p -> Transfer.transfer   p s

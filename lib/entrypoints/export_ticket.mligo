@@ -21,5 +21,7 @@ type singler_export_ticket = [@layout:comb] {
 
 type export_ticket = singler_export_ticket list
 
+type t = export_ticket
+
 let export_ticket (_exported_ticket : export_ticket) (storage: storage) : operation list * storage =
    ([]: operation list), storage

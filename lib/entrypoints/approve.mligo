@@ -14,5 +14,7 @@ type single_approve = [@layout:comb] {
 
 type approvements = single_approve list
 
+type t = approvements
+
 let main (_approvements: approvements) (storage: storage) : operation list * storage =
    ([]: operation list), storage

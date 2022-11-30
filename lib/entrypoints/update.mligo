@@ -16,6 +16,8 @@ type unit_update      =
 
 type update_operators = unit_update list
 
+type t = update_operators
+
 let update_ops (type a) (updates: update_operators) (s: a storage) : operation list * a storage =
    let update_operator (operators,update : Operators.t * unit_update) = match update with
       Add_operator    {owner=owner;operator=operator;token_id=token_id} -> Operators.add_operator    operators owner operator token_id

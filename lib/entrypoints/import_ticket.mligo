@@ -12,11 +12,13 @@ type tickets_to_import_to = {
 
 type import_ticket = tickets_to_import_to list
 
+type t = import_ticket
+
 let assert_ticketer_is_self_address (ticketer: address) : unit =
     assert_with_error (ticketer = (Tezos.get_self_address ())) Errors.invalid_ticket
 
 let import_ticket (type a) (imported_ticket : tickets_to_import_to) (storage: a storage) : operation list * a storage =
-    let { to_; tickets_to_import} = imported_ticket in
+    let { to_; tickets_to_import } = imported_ticket in
     let (ticketer, ((token_id, _), amount)), _ = Tezos.read_ticket tickets_to_import in
     let () = assert_ticketer_is_self_address ticketer in
     let ledger = Ledger.increase_token_amount_for_user storage.ledger to_ token_id amount in

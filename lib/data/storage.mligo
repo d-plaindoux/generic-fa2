@@ -2,6 +2,7 @@
 #import "metadata.mligo" "Metadata"
 #import "token.mligo" "Token"
 #import "operators.mligo" "Operators"
+#import "approvals.mligo" "Approvals"
 #import "tokenMetadata.mligo" "TokenMetadata"
 #import "ledger.mligo" "Ledger"
 
@@ -10,6 +11,7 @@ type 'a t = {
   ledger: Ledger.t;
   token_metadata: TokenMetadata.t;
   operators: Operators.t;
+  approvals: Approvals.t; 
   extension: 'a;
 }
 
@@ -18,8 +20,11 @@ let assert_token_exist (type a) (s: a t) (token_id : Token.t) : unit  =
      Errors.undefined_token in
   ()
 
-let set_ledger (type a) (s: a t) (ledger:Ledger.t) = {s with ledger = ledger}
 let get_ledger (type a) (s: a t) = s.ledger
+let set_ledger (type a) (s: a t) (ledger:Ledger.t) = {s with ledger = ledger}
 
 let get_operators (type a) (s: a t) = s.operators
 let set_operators (type a) (s: a t) (operators:Operators.t) = {s with operators = operators}
+
+let get_approvals (type a) (s: a t) = s.approvals
+let set_approvals (type a) (s: a t) (approvals:Approvals.t) = {s with approvals = approvals}

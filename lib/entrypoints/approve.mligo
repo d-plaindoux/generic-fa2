@@ -1,10 +1,23 @@
+#import "../data/errors.mligo" "Errors"
 #import "../data/token.mligo" "Token"
-#import "../data/ledger.mligo" "Ledger"
+#import "../data/approvals.mligo" "Approvals"
 #import "../data/storage.mligo" "Storage"
 
 type storage = Storage.t
 
-type single_approve = [@layout:comb] {
+(*
+   (list %approve
+      (pair
+         (address %owner)
+         (address %spender)
+         (nat %token_id)
+         (nat %old_value)
+         (nat %new_value)
+      )
+   )
+*)
+
+type approve = [@layout:comb] {
       owner     : address;
       spender   : address;
       token_id  : Token.t;
@@ -12,9 +25,18 @@ type single_approve = [@layout:comb] {
       new_value : nat;
    }   
 
-type approvements = single_approve list
+type approvements = approve list
 
 type t = approvements
 
-let approve (type a) (_approvements: approvements) (storage: a storage) : operation list * a storage =
-   ([]: operation list), storage
+let approve (approve: approve) (approvals: Approvals.t) : Approvals.t =
+   // Check token id validity?
+   let { owner; spender; token_id; old_value; new_value } = approve in
+   let amount = Approvals.get_amount approvals owner spender token_id in
+   let () = assert_with_error (amount = old_value) Errors.unsafe_approval in
+   let approvals = Approvals.set_amount approvals owner spender token_id new_value in
+   approvals
+
+let approve (type a) (approvements: approvements) (storage: a storage) : operation list * a storage =
+   let approvals = List.fold_left (fun (approvals,a) -> approve a approvals) (Storage.get_approvals storage) approvements in
+   [], Storage.set_approvals storage approvals

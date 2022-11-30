@@ -33,6 +33,9 @@ let get_initial_storage (a, b, c : nat * nat * nat) =
   ])
   in
 
+  let approvals = Big_map.literal ([])
+  in
+
   let token_metadata = (Big_map.literal [
     (1n, ({token_id=1n;token_info=(Map.empty : (string, bytes) map);} :
     FA2.TokenMetadata.data));
@@ -50,6 +53,7 @@ let get_initial_storage (a, b, c : nat * nat * nat) =
     ledger         = ledger;
     token_metadata = token_metadata;
     operators      = operators;
+    approvals      = approvals;
     extension      = ();
   } in
   initial_storage, owners, ops

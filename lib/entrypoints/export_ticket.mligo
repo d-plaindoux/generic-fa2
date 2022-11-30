@@ -65,5 +65,3 @@ let export_ticket_to (export_tickets_to: export_tickets_to) (ops, ledger: operat
 let export_tickets (type a) (export_ticket: export_ticket) (storage: a storage) : operation list * a storage =
    let ops, ledger = List.fold_left (fun (r,t) -> export_ticket_to t r) ([], Storage.get_ledger storage) export_ticket in
    ops, Storage.set_ledger storage ledger
-
-(* Note: This code should be reviewed thanks to approval *)

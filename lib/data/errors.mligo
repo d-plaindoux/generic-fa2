@@ -14,4 +14,5 @@ let send_hook_under = "FA2_SENDER_HOOK_UNDEFINED"
 let invalid_ticket  = "FA2.1_INVALID_TICKET"
 let unsafe_approval = "FA2.1_UNSAFE_APPROVAL_CHANGE"
 
+let storage_has_no_operators = "The storage does not support operators management"
 let only_sender_manage_operators = "The sender can only manage operators for his own token"

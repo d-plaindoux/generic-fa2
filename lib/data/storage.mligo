@@ -10,7 +10,7 @@ type 'a t = {
   metadata: Metadata.t;
   ledger: Ledger.t;
   token_metadata: TokenMetadata.t;
-  operators: Operators.t;
+  operators: Operators.t option;
   approvals: Approvals.t; 
   extension: 'a;
 }
@@ -24,7 +24,7 @@ let get_ledger (type a) (s: a t) = s.ledger
 let set_ledger (type a) (s: a t) (ledger:Ledger.t) = {s with ledger = ledger}
 
 let get_operators (type a) (s: a t) = s.operators
-let set_operators (type a) (s: a t) (operators:Operators.t) = {s with operators = operators}
+let set_operators (type a) (s: a t) (operators:Operators.t) = {s with operators = Some operators}
 
 let get_approvals (type a) (s: a t) = s.approvals
 let set_approvals (type a) (s: a t) (approvals:Approvals.t) = {s with approvals = approvals}

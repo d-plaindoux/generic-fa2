@@ -30,7 +30,6 @@ type approvements = approve list
 type t = approvements
 
 let approve (approve: approve) (approvals: Approvals.t) : Approvals.t =
-   // Check token id validity?
    let { owner; spender; token_id; old_value; new_value } = approve in
    let amount = Approvals.get_amount approvals owner spender token_id in
    let () = assert_with_error (amount = old_value) Errors.unsafe_approval in

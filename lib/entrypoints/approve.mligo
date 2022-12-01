@@ -5,18 +5,6 @@
 
 type storage = Storage.t
 
-(*
-   (list %approve
-      (pair
-         (address %owner)
-         (address %spender)
-         (nat %token_id)
-         (nat %old_value)
-         (nat %new_value)
-      )
-   )
-*)
-
 type approve = [@layout:comb] {
       owner     : address;
       spender   : address;

@@ -5,16 +5,6 @@
 
 type storage = Storage.t
 
-(*
-    (list %import_ticket
-        (pair
-            (address %to_)
-            (list %tickets_to_import
-                (ticket (pair nat (option bytes)))
-            )
-        )
-*)
-
 type imported_ticket = (Token.t * bytes option) ticket
 
 type tickets_to_import_to = { 

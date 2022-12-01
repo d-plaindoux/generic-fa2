@@ -21,7 +21,7 @@ type transfer = transfer_from list
 
 type t = transfer
 
-let authorize_transfer (type a) (from_: address) (token_id: Token.t) (amount: nat) (approvals:Approvals.t) (storage: a storage) : Approvals.t =
+let authorize_transfer (type a) (from_: address) (token_id: Token.t) (amount: nat) (storage: a storage) (approvals:Approvals.t): Approvals.t =
    match Storage.get_operators storage with
    | Some operators -> let () = Operators.assert_authorisation operators from_ token_id in approvals
    | None           -> Approvals.decrease_approved_amount approvals from_ (Tezos.get_sender ()) token_id amount
@@ -29,7 +29,7 @@ let authorize_transfer (type a) (from_: address) (token_id: Token.t) (amount: na
 let atomic_trans (type a) (from_:address) (storage: a storage) ((ledger, approvals), transfer:(Ledger.t * Approvals.t) * atomic_trans) =
    let { to_; token_id; amount = amount_ } = transfer in
    let ()        = Storage.assert_token_exist storage token_id in
-   let approvals = authorize_transfer from_ token_id amount_ approvals storage in
+   let approvals = authorize_transfer from_ token_id amount_ storage approvals in
    let ledger    = Ledger.decrease_token_amount_for_user ledger from_ token_id amount_ in
    let ledger    = Ledger.increase_token_amount_for_user ledger to_   token_id amount_ in
    ledger, approvals

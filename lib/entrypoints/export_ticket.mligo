@@ -4,23 +4,6 @@
 
 type storage = Storage.t
 
-(*
-   (list %export_ticket
-      (pair
-         (or %destination (contract (ticket (pair nat (option bytes))))
-               (contract (list (ticket (pair nat (option bytes)))))
-         )
-         (list %tickets_to_export
-               (pair
-                  (address %from_)
-                  (nat %token_id)
-                  (nat %amount)
-               )
-         )
-      )
-   )
-*)
-
 type exported_ticket = (nat * bytes option) ticket 
 
 type ticket_to_export = [@layout:comb] {

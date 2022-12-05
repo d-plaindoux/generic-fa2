@@ -11,8 +11,8 @@
 
 type parametric_storage = Storage.t
 
-type ledger_kind = Ledger.Single_asset.t
-let ledger_make = Ledger.Single_asset.ledger_and_make
+type ledger_kind = Ledger.Multi_asset.t
+let ledger_make = Ledger.Multi_asset.ledger_and_make
 
 type storage = (unit, ledger_kind) parametric_storage
 

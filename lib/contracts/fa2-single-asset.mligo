@@ -7,7 +7,6 @@
 #import "../data/tokenMetadata.mligo" "TokenMetadata"
 #import "../data/storage.mligo" "Storage"
 
-
 #import "../entrypoints/transfer.mligo" "Transfer"
 #import "../entrypoints/balance_of.mligo" "Balance_of"
 #import "../entrypoints/update.mligo" "Update"

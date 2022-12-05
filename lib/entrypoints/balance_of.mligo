@@ -20,15 +20,17 @@ type balance_of = [@layout:comb] {
    }
 
 type t = balance_of
+type ledger = Ledger.t
+type ledger_and_make = Ledger.ledger_and_make
 
-let get_balance_info (type a) (storage: a storage)  (request : request) : callback =
+let get_balance_info (type a k) (storage: (a, k) storage) (make: k ledger -> k ledger_and_make) (request : request) : callback =
    let {owner;token_id} = request in
-   let ()          = Storage.assert_token_exist storage token_id in
-   let balance_    = Ledger.get_for_user storage.ledger owner token_id in
+   let () = Storage.assert_token_exist storage token_id in
+   let balance_ = Ledger.get_for_user (make storage.ledger) owner token_id in
    {request=request;balance=balance_}
 
-let balance_of (type a) (balance: balance_of) (storage: a storage) : operation list * a storage =
+let balance_of (type a k) (balance: balance_of) (storage: (a, k) storage) (make: k ledger -> k ledger_and_make) : operation list * (a, k) storage =
    let {requests;callback} = balance in
-   let callback_param = List.map (get_balance_info storage) requests in
+   let callback_param = List.map (get_balance_info storage make) requests in
    let operation = Tezos.transaction callback_param 0tez callback in
    [ operation ], storage

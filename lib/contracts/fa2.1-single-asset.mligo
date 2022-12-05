@@ -1,7 +1,4 @@
 #import "../data/errors.mligo" "Errors"
-#import "../data/errors.mligo" "Errors"
-#import "../data/errors.mligo" "Errors"
-#import "../data/errors.mligo" "Errors"
 #import "../data/metadata.mligo" "Metadata"
 #import "../data/token.mligo" "Token"
 #import "../data/ledger.mligo" "Ledger"

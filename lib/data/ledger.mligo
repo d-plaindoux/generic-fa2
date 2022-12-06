@@ -10,7 +10,7 @@ type ('k,'v) ledger_module = {
     make_key  : address -> Token.t -> 'k;
     add_to_val: address -> nat -> 'v option -> 'v option;
     sub_to_val: address -> nat -> 'v option -> 'v option;
-    balance_of: 'v option -> nat;
+    balance_of: address -> 'v option -> nat;
 }
 
 let get_for_user 
@@ -19,7 +19,8 @@ let get_for_user
       (owner: owner) 
       (token_id: Token.t) 
       : v option =
-  Big_map.find_opt (ledger_module.make_key owner token_id) ledger_module.data
+  let key = ledger_module.make_key owner token_id in
+  Big_map.find_opt key ledger_module.data
 
 let set_for_user 
       (type k v) 
@@ -28,7 +29,8 @@ let set_for_user
       (token_id: Token.t) 
       (value:v option) 
       : (k,v) ledger_module =
-  let data = Big_map.update (ledger_module.make_key owner token_id) value ledger_module.data in
+  let key = ledger_module.make_key owner token_id in
+  let data = Big_map.update key value ledger_module.data in
   { ledger_module with data }
 
 let decrease_token_amount_for_user 
@@ -63,13 +65,13 @@ module Single_asset = struct
   type k = address
   type v = nat
   let make_key (a:address) (_: Token.t) = a
-  let balance_of (value:v option) = 
+  let balance_of (_:address) (value:v option) = 
       match value with None -> 0n | Some v -> v 
-  let add_to_val (_address:address) (value:v) (old_value:v option) = 
-      let old_value = balance_of old_value in
+  let add_to_val (address:address) (value:v) (old_value:v option) = 
+      let old_value = balance_of address old_value in
       Some (value + old_value)
-  let sub_to_val (_address:address) (value:v) (old_value:v option) = 
-      let old_value = match old_value with None -> 0n | Some v -> v in
+  let sub_to_val (address:address) (value:v) (old_value:v option) = 
+      let old_value = balance_of address old_value in
       let () = assert_with_error (old_value >= value) Errors.ins_balance in
       Some (abs (old_value - value))
   let ledger_module (data: (k,v) ledger) : (k,v) ledger_module = { 
@@ -81,13 +83,13 @@ module Multi_asset = struct
   type k = address * Token.t
   type v = nat
   let make_key (a:address) (t: Token.t) = a,t
-  let balance_of (value:v option) = 
+  let balance_of (_:address) (value:v option) = 
       match value with None -> 0n | Some v -> v 
-  let add_to_val (_address:address) (value:v) (old_value:v option) = 
-      let old_value = balance_of old_value in
+  let add_to_val (address:address) (value:v) (old_value:v option) = 
+      let old_value = balance_of address old_value in
       Some (old_value + value)
-  let sub_to_val (_address:address) (value:v) (old_value:v option) = 
-      let old_value = match old_value with None -> 0n | Some v -> v in
+  let sub_to_val (address:address) (value:v) (old_value:v option) = 
+      let old_value = balance_of address old_value in
       let () = assert_with_error (old_value >= value) Errors.ins_balance in
       Some (abs (old_value - value))
   let ledger_module (data: (k,v) ledger) : (k,v) ledger_module = { 
@@ -99,8 +101,8 @@ module NFT = struct
   type k = Token.t
   type v = address * nat
   let make_key (_address:address) (t: Token.t) = t
-  let balance_of (value:v option) = 
-      match value with None -> 0n | Some (_,_) -> 1n  (* TODO: 1n or the associated value? *)
+  let balance_of (address:address) (value:v option) = 
+      match value with None -> 0n | Some (own,_) -> if (own = address) then 1n else 0n (* TODO: 1n or the associated value? *)
   let add_to_val (address:address) (amount_:nat) (_old_value:v option) = Some (address,amount_)
   let sub_to_val (_address:address) (_amount :nat) (_old_value:v option) = (None : v option)
   let ledger_module (data: (k,v) ledger) : (k,v) ledger_module = { 

@@ -45,7 +45,7 @@ let balance_of
          : nat =
    let ledger_module = make storage.ledger in
    let value = Ledger.get_for_user ledger_module owner token_id in
-   ledger_module.balance_of value
+   ledger_module.balance_of owner value
 
 let total_supply 
          (type a k v) 

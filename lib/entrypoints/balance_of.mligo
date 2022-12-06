@@ -32,7 +32,7 @@ let get_balance_info
    let {owner;token_id} = request in
    let () = Storage.assert_token_exist storage token_id in
    let value = Ledger.get_for_user ledger_module owner token_id in
-   let balance_ = ledger_module.balance_of value in
+   let balance_ = ledger_module.balance_of owner value in
    {request=request;balance=balance_}
 
 let balance_of 

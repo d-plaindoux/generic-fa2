@@ -1,4 +1,4 @@
-# Generic FA2
+# Generic FA2 and FA2.1
 
 Experiment with generic FA2.1 contracts.
 

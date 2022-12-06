@@ -1,12 +1,13 @@
 # Generic FA2 and FA2.1
 
-Experiment with generic FA2.1 contracts.
+This module is a implementation of the last [FA2.1 proposition](balance_of address old_value in).
 
-Original contracts code:
+The current implementation covers:
+- multi-asset,
+- single-asset and
+- NFT.
 
--   <https://gitlab.com/ligolang/contract-catalogue>
--   <https://github.com/pewulfman/Tezos-TZIP-implementation>
+## Internal Design
 
-## How it works?
+Contracts uses the same code but specific bahaviors are given thanks to a record type (kind of module)
 
-TODO

@@ -17,7 +17,7 @@
 type storage = Storage.t
 
 type ledger = Ledger.t
-type ledger_and_make = Ledger.ledger_and_make
+type ledger_module = Ledger.ledger_module
 
 type parameter = [@layout:comb]
    | Transfer of Transfer.transfer
@@ -25,13 +25,13 @@ type parameter = [@layout:comb]
    | Update_operators of Update.update_operators
 
 let main 
-         (type a k) 
-         (ledger_and_make:k ledger -> k ledger_and_make) 
-         ((p,s):(parameter * (a,k) storage)) 
-         : operation list * (a,k) storage = 
+         (type a k v) 
+         (make:(k,v) ledger -> (k,v) ledger_module) 
+         ((p,s):(parameter * (a,k,v) storage)) 
+         : operation list * (a,k,v) storage = 
    match p with
-   | Transfer         p -> Transfer.transfer p s ledger_and_make
-   | Balance_of       p -> Balance_of.balance_of p s ledger_and_make
+   | Transfer         p -> Transfer.transfer p s (make s.ledger)
+   | Balance_of       p -> Balance_of.balance_of p s (make s.ledger)
    | Update_operators p -> Update.update_ops p s
 
 (*
@@ -39,16 +39,17 @@ let main
 *)
 
 let balance_of 
-         (type a k) 
-         (ledger_and_make:k ledger -> k ledger_and_make) 
-         (parameter, storage : (address * Token.t) * (a,k) storage) 
+         (type a k v) 
+         (make:(k,v) ledger -> (k,v) ledger_module) 
+         ((owner, token_id), storage : (address * Token.t) * (a,k,v) storage) 
          : nat =
-   let (owner, token_id) = parameter in
-   Ledger.get_for_user (ledger_and_make storage.ledger) owner token_id
+   let ledger_module = make storage.ledger in
+   let value = Ledger.get_for_user ledger_module owner token_id in
+   ledger_module.balance_of value
 
 let total_supply 
-         (type a k) 
-         ((token_id, storage) : (nat * (a,k) storage)) 
+         (type a k v) 
+         ((token_id, storage) : (nat * (a,k,v) storage)) 
          : nat =
    if Storage.token_exist storage token_id 
    then 1n 

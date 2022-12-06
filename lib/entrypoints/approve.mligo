@@ -24,6 +24,6 @@ let approve (approve: approve) (approvals: Approvals.t) : Approvals.t =
    let approvals = Approvals.set_amount approvals owner spender token_id new_value in
    approvals
 
-let approve (type a k) (approvements: approvements) (storage: (a, k) storage) : operation list * (a, k) storage =
+let approve (type a k v) (approvements: approvements) (storage: (a, k, v) storage) : operation list * (a, k, v) storage =
    let approvals = List.fold_left (fun (approvals,a) -> approve a approvals) (Storage.get_approvals storage) approvements in
    [], Storage.set_approvals storage approvals

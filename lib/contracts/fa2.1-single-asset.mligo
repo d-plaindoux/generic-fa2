@@ -11,20 +11,17 @@
 
 type parametric_storage = Storage.t
 
-type ledger_kind = Ledger.Single_asset.t
-let ledger_make = Ledger.Single_asset.ledger_and_make
+type storage = (unit, Ledger.Multi_asset.k, Ledger.Multi_asset.v) parametric_storage
 
-type storage = (unit, ledger_kind) parametric_storage
-
-let main (p:(FA2_1.parameter * storage)): operation list * storage = 
-   FA2_1.main ledger_make p
+let main (p:FA2_1.parameter * storage) : operation list * storage = 
+   FA2_1.main Ledger.Multi_asset.ledger_module p
 
 (*
    Views corner
 *)
 
 [@view] let balance_of : ((address * Token.t) * storage) -> nat =
-   FA2_1.balance_of ledger_make
+   FA2_1.balance_of Ledger.Multi_asset.ledger_module
 
 [@view] let total_supply : (Token.t * storage) -> nat =
    FA2_1.total_supply

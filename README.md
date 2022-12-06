@@ -1,6 +1,6 @@
 # Generic FA2
 
-Experiment with generic FA2 contracts.
+Experiment with generic FA2.1 contracts.
 
 Original contracts code:
 
@@ -8,3 +8,5 @@ Original contracts code:
 -   <https://github.com/pewulfman/Tezos-TZIP-implementation>
 
 ## How it works?
+
+TODO
